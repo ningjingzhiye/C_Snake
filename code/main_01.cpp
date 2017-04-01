@@ -1,7 +1,3 @@
-/**
- * http://blog.csdn.net/hai8902882/article/details/6976490 
- *
- */
 #include <stdio.h>  
 #include <stdlib.h>  
 #include <conio.h>  
@@ -19,9 +15,9 @@ char GameMap[H][W];   //游戏地图
 int  dx[4] = {0, 0, -1, 1};  //左、右、上、下的方向  
 int  dy[4] = {-1, 1, 0, 0};  
 
-void Initial();  //地图的初始化  
-void Show();   //刷新显示地图
-void Move();
+void Initial();  //数据初始化，并绘制初始地图  
+void Refresh();   //改变数据，刷新显示地图
+void Move(); // 移动
 
 typedef struct head{
 	int x;
@@ -95,12 +91,6 @@ void setGraph()
 	}
 }
 
-int main()   
-{  
-	Initial();  
-	Show();  
-	return 0;  
-} 
 
 void paint()
 {
@@ -151,20 +141,21 @@ void Initial()  //地图的初始化
 	//printf("按任意方向键开始游戏\n");    
 }
 
-void Show()  //刷新显示地图  
+void Refresh()  //刷新显示地图  
 {  
 	int i, j;  
 	while(1)  
 	{    
 		_sleep(500); //延迟半秒(1000为1s),即每半秒刷新一次地图  
-	
-		Move(); // 移动，改变数据
+		
+		/***********改变数据*****************/
+		
+		Move(); // 移动
 
 
-		// 事件监听，改变数据
-
+		/****************************/
 		system("cls");   //清空地图再显示刷新的地图  
-		paint();
+		paint(); // 重画 
 
 		/*for(i = 0; i < H; i++)   
 		{   
@@ -194,3 +185,10 @@ void Move()
 
 	setGraph();
 }
+
+int main()   
+{  
+	Initial();  
+	Refresh();
+	return 0;  
+} 
