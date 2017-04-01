@@ -142,7 +142,52 @@ void Button()
 ```
 
 ## 4 随机产生食物
+![](./imgs/02.png)
 
+```
+int randint(int x, int y)
+{
+	int ans = rand() % (y - x + 1) + x;
+	return ans;
+}
+
+bool checkCollidWithSnakeHead(int x, int y)
+{
+	if(GameMap[x][y] == '@')
+		return true;
+	return false;
+}
+
+bool checkCollidWithSnakeBody(int x, int y)
+{
+	if(GameMap[x][y] == '#')
+		return true;
+	return false;
+}
+
+void Create_food()
+{
+	int px = randint(1, H-1);
+	int py = randint(1, W-1);
+	while( checkCollidWithSnakeHead(px, py) || checkCollidWithSnakeBody(px, py))
+	{
+		px = randint(1, H-1);
+		py = randint(1, W-1);
+	}
+	foodx = px;
+	foody = py;
+
+	GameMap[foodx][foody] = '%';
+}
+```
+
+在void setGraph()中需要重新设置,加入如下的语句
+```
+if(isExistFood)
+{
+	GameMap[foodx][foody] = '%';
+}
+```
 
 ## 5
 

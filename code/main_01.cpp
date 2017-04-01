@@ -1,3 +1,7 @@
+/**
+ * http://blog.csdn.net/hai8902882/article/details/6976490 
+ *
+ */
 #include <stdio.h>  
 #include <stdlib.h>  
 #include <conio.h>  
@@ -9,7 +13,7 @@
 using namespace std;
 
 const int H = 20;   //地图的高  
-const int W = 20;  //地图的长  
+const int W = 40;  //地图的长  
 char GameMap[H][W];   //游戏地图  
 
 int  dx[4] = {0, 0, -1, 1};  //左、右、上、下的方向  
@@ -49,19 +53,63 @@ typedef struct snake
 }Snake;
 
 Snake mySnake; // 全局变量
+int foodx, foody;
+bool isExistFood;
+
+// >= x, <= y的随机整数
+int randint(int x, int y)
+{
+	int ans = rand() % (y - x + 1) + x;
+	return ans;
+}
+
+bool checkCollidWithSnakeHead(int x, int y)
+{
+	if(GameMap[x][y] == '@')
+		return true;
+	return false;
+}
+
+bool checkCollidWithSnakeBody(int x, int y)
+{
+	if(GameMap[x][y] == '#')
+		return true;
+	return false;
+}
+
+void Create_food()
+{
+	int px = randint(1, H-1);
+	int py = randint(1, W-1);
+	while( checkCollidWithSnakeHead(px, py) || checkCollidWithSnakeBody(px, py))
+	{
+		px = randint(1, H-1);
+		py = randint(1, W-1);
+	}
+	foodx = px;
+	foody = py;
+
+	GameMap[foodx][foody] = '%';
+}
 
 Snake initSnake()
 {
+	isExistFood = false;
+	foodx = 0;
+	foody = 0;
+
 	int dir = 0;
 	
 	Snake sn;
 
-	Head he(2,W-4,0);
+	int head_randx = randint(H/3, H/3*2);
+	int head_randy = randint(W/3, W/3*2);
+	Head he(head_randx, head_randy, 0);
 	sn.sh = he;
 
 	sn.sbLen = 2;
-	Body bd1(2, W-3);
-	Body bd2(2, W-2);
+	Body bd1(head_randx, head_randy+1);
+	Body bd2(head_randx, head_randy+2);
 	
 	sn.sb.push_back(bd1);
 	sn.sb.push_back(bd2);
@@ -73,6 +121,11 @@ void setGraph()
 {
 	memset(GameMap, ' ', sizeof(GameMap));  //初始化地图全部为空'.'  
 
+	if(isExistFood)
+	{
+		GameMap[foodx][foody] = '%';
+	}
+	
 	for(int i=0;i<W;i++)
 	{
 		GameMap[0][i] = '*';
@@ -90,7 +143,6 @@ void setGraph()
 		GameMap[mySnake.sb[i].x][mySnake.sb[i].y] = '#';
 	}
 }
-
 
 void paint()
 {
@@ -150,8 +202,13 @@ void Refresh()  //刷新显示地图
 		
 		/***********改变数据*****************/
 		
-		Move(); // 移动
-
+		Move(); // snake move
+		
+		if(isExistFood == false) // generate rand food
+		{
+			Create_food();
+			isExistFood = true;
+		}
 
 		/****************************/
 		system("cls");   //清空地图再显示刷新的地图  
@@ -174,6 +231,9 @@ void Move()
 	int newHeadx = mySnake.sh.x + dx[mySnake.sh.dir];
 	int newHeady = mySnake.sh.y + dy[mySnake.sh.dir];
 
+	// check if eat food
+	// TODO
+
 	for(int i=0;i<mySnake.sbLen;i++)
 	{
 		mySnake.sb[i].x = mySnake.sb[i].x + dx[mySnake.sh.dir];
@@ -188,6 +248,7 @@ void Move()
 
 int main()   
 {  
+	srand((unsigned)(time(NULL)));
 	Initial();  
 	Refresh();
 	return 0;  
