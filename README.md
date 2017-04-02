@@ -1,7 +1,7 @@
 
 # 运行环境
 
-win7 + vs2010
+win7 + vs2010、vs2013
 
 # 设计思路与数据结构
 ```
@@ -41,8 +41,42 @@ typedef struct snake
 
 ## 蛇数据设计
 
-## 运行逻辑
+```
+typedef struct head{
+	int x;
+	int y;
+	int dir;
+	head(int _x = -1, int _y = -1, int _dir = -1)
+	{
+		x = _x;
+		y = _y;
+		dir = _dir;
+	}
+}Head;
 
+typedef struct body{
+	int x;
+	int y;
+	body(int _x = -1, int _y = -1)
+	{
+		x = _x;
+		y = _y;
+	}
+}Body;
+
+typedef struct snake
+{
+	Head sh;
+	vector<Body> sb;
+	int sbLen;
+}Snake;
+```
+
+蛇 = 蛇头（坐标+方向） + 蛇身（坐标）
+
+vector -> list （主要是吃食物需要插入，list效率高于vector）
+
+## 运行逻辑
 ```
 sleep
 clear
@@ -77,9 +111,8 @@ void Move()
 }
 ```
 
-## 3 能控制方向（键盘事件添加）
 
-### 处理蛇移动 改变数据
+## 3 处理蛇移动 改变数据
 ```
 void Move()
 {
@@ -108,7 +141,7 @@ void Move()
 }
 ```
 
-### 键盘事件添加
+## 4 键盘事件添加,控制蛇移动的方向
 
 ```
 int key; // 全局变量
@@ -141,10 +174,12 @@ void Button()
 }
 ```
 
-## 4 随机产生食物
+## 5 随机产生食物
 ![](./imgs/02.png)
 
 ```
+srand((unsigned)(time(NULL)));
+
 int randint(int x, int y)
 {
 	int ans = rand() % (y - x + 1) + x;
@@ -189,10 +224,33 @@ if(isExistFood)
 }
 ```
 
-## 5
+## 6 吃食物
 
+## 7 死亡判断
+
+## 8 分数
+
+## 9 面向过程 =》 面向对象
+
+对象： 成员 与 成员方法（属性） =》 面向对象
 
 # 不足与改进
 
+有些函数在不同编译器是不一样的, 比如下面的一些函数，vs6.0, vs2010， vs2013不同的
+
+```
+kitch -> _kitch
+getch -> _kitch
+slepp -> _sleep -> Sleep（需要包含 window.h）
+```
+
 
 # 作者与参考
+
+* 作者git
+
+ https://github.com/ningjingzhiye
+
+* 主要参考
+
+http://blog.csdn.net/hai8902882/article/details/6976490
