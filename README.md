@@ -239,9 +239,9 @@ if(isExistFood)
 有些函数在不同编译器是不一样的, 比如下面的一些函数，vs6.0, vs2010， vs2013不同的
 
 ```
-kitch -> _kitch
-getch -> _kitch
-slepp -> _sleep -> Sleep（需要包含 window.h）
+kbhit -> _kbhit
+getch -> _getch
+sleep -> _sleep -> Sleep（需要包含 window.h）
 ```
 
 
